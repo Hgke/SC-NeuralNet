@@ -3,25 +3,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # !!! Импортируем класс кнопки и слайдера
-from matplotlib.widgets import TextBox, Slider
+from matplotlib.widgets import Slider
 
 # Определим нормировочный ток, через который задаются все остальные величины
 
-I_norm = 0.125*10**(-3)
+I_u = 0.125*10**(-3)
 Phi_0 = 2.06783385*10**(-15)
-
-# параметры JJ
 V_u = 0.01*10**(-3)
-I_c = 0.125*10**(-3)
+
+I_c = I_u
+print(r"$I_{u}$ = ",I_u, "$V_{u}$ = ",V_u )
+
 R = V_u/I_c
 
-I_norm_c = I_c/I_norm
+I_norm_c = I_c/I_u
 V_norm = I_c*R
-R_norm = V_norm/I_norm
+R_norm = V_norm/I_u
 t_norm = (Phi_0/(2*np.pi))*(1/V_norm)
 w_norm = 1/t_norm
 C_norm = (Phi_0/(2*np.pi)) * 1/(V_norm*R_norm)
-L_norm = (Phi_0/(2*np.pi)) * 1/I_norm
+L_norm = (Phi_0/(2*np.pi)) * 1/I_u
 
 print("t_norm = ",t_norm,"w_norm = ",w_norm)
 
@@ -52,9 +53,9 @@ if __name__ == '__main__':
         i_c = 0.25
 
         Q = R_norm * C_norm / np.sqrt(L_norm * C_norm) * r*c/np.sqrt(l*c)
-        Omega = np.sqrt(2.07*10**(-15)*C_norm*c/(2*np.pi*I_norm)) * 1/np.sqrt(L_norm*C_norm * c*l)
+        #Omega = np.sqrt(2.07*10**(-15)*c/(2*np.pi*I_norm)) * 1/np.sqrt(L_norm*C_norm * c*l)
 
-        G = np.sqrt(2.07*10**(-15)/(2*np.pi*I_norm*R_norm*C_norm*c))
+        #G = np.sqrt(2.07*10**(-15)/(2*np.pi*I_norm*R_norm*C_norm*c))
         x = np.arange(-5, 5, 10**(-3))
         y = gauss(l, c, r, r_12,i_c,x)
 
@@ -63,7 +64,7 @@ if __name__ == '__main__':
 
         graph_axes.plot(x, y)
 
-        plt.xlabel(f'Q={np.round(Q,2)}, w = {np.round(Omega,2)}',fontsize=15)
+        #plt.xlabel(f'Q={np.round(Q,2)}, w = {np.round(Omega,2)}',fontsize=15)
 
         plt.draw()
 
@@ -86,7 +87,7 @@ if __name__ == '__main__':
                           valmin=0.0,
                           valmax=50.0,
                           valinit=10.0,
-                          valfmt='%1.1f')
+                          valfmt='%1.2f')
     slider_L.on_changed(onChangeValue)
 
     # !!! C
@@ -96,7 +97,7 @@ if __name__ == '__main__':
                           valmin=0.0,
                           valmax=20.0,
                           valinit=10.0,
-                          valfmt='%1.1f')
+                          valfmt='%1.2f')
     slider_C.on_changed(onChangeValue)
 
     # !!! R
@@ -106,7 +107,7 @@ if __name__ == '__main__':
                           valmin=0.0,
                           valmax=10.0,
                           valinit=0.1,
-                          valfmt='%1.1f')
+                          valfmt='%1.2f')
     slider_R.on_changed(onChangeValue)
 
     # !!! R_12
@@ -116,7 +117,7 @@ if __name__ == '__main__':
                           valmin=0.0,
                           valmax=10.0,
                           valinit=1,
-                          valfmt='%1.1f')
+                          valfmt='%1.2f')
     slider_R_12.on_changed(onChangeValue)
 
 
