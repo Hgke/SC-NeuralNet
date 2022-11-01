@@ -9,10 +9,10 @@ from matplotlib.widgets import Slider
 
 I_u = 0.125*10**(-3)
 Phi_0 = 2.06783385*10**(-15)
-V_u = 0.01*10**(-3)
+V_u = 0.1*10**(-3)
 
-I_c = I_u
-print(r"$I_{u}$ = ",I_u, "$V_{u}$ = ",V_u )
+i = 0.2
+I_c = i*I_u
 
 R = V_u/I_c
 
@@ -23,10 +23,18 @@ t_norm = (Phi_0/(2*np.pi))*(1/V_norm)
 w_norm = 1/t_norm
 C_norm = (Phi_0/(2*np.pi)) * 1/(V_norm*R_norm)
 L_norm = (Phi_0/(2*np.pi)) * 1/I_u
+# V_norm = 0.3*10**(-3)
+# I_norm = 0.125*10**(-3)
+# t_norm = 1.1*10**(-12)
+# w_norm = 1/t_norm
+# L_norm = 2.64*10**(-12)
+# C_norm =
+print(V_norm)
+print(I_norm_c,C_norm, L_norm, R_norm)
+print("I_u = ",I_u*10**(3),"мА, ", "V_u = ",V_u*10**(3), "мВ, ", "R_u = ", R_norm, "Ом")
+print(f"t_norm = {np.round(t_norm*10**(9),3)} нс, w_norm = {np.round(w_norm*10**(-9),1)} ГГц")
 
-print("t_norm = ",t_norm,"w_norm = ",w_norm)
-
-def gauss(l, c, r,r_12,i_c, w):
+def function(l, c, r,r_12,i_c, w):
     '''Отображаемая фукнция K(w)'''
     return np.abs(w) *(1 / i_c) / np.sqrt(
         r_12 ** 2 + (1 / i_c) ** 2 * w ** 2) * 1 / np.sqrt(
@@ -52,13 +60,15 @@ if __name__ == '__main__':
         r_12 = slider_R_12.val
         i_c = 0.25
 
-        Q = R_norm * C_norm / np.sqrt(L_norm * C_norm) * r*c/np.sqrt(l*c)
+        #Q = R_norm * C_norm / np.sqrt(L_norm * C_norm) * r*c/np.sqrt(l*c)
         #Omega = np.sqrt(2.07*10**(-15)*c/(2*np.pi*I_norm)) * 1/np.sqrt(L_norm*C_norm * c*l)
 
         #G = np.sqrt(2.07*10**(-15)/(2*np.pi*I_norm*R_norm*C_norm*c))
         x = np.arange(-5, 5, 10**(-3))
-        y = gauss(l, c, r, r_12,i_c,x)
+        y = function(l, c, r, r_12,i_c,x)
 
+        #print(np.abs(x[np.argmax(y)]))
+        plt.title(f'$w_m$ = {np.round(np.abs(x[np.argmax(y)]),2)},  $w/w_c$',x = 0.85,y=6.5, fontsize=12.0)
 
         graph_axes.clear()
 
@@ -85,8 +95,8 @@ if __name__ == '__main__':
     slider_L = Slider(axes_slider_L,
                           label='L',
                           valmin=0.0,
-                          valmax=50.0,
-                          valinit=10.0,
+                          valmax=10.0,
+                          valinit=2.0,
                           valfmt='%1.2f')
     slider_L.on_changed(onChangeValue)
 
@@ -96,7 +106,7 @@ if __name__ == '__main__':
                           label='C',
                           valmin=0.0,
                           valmax=20.0,
-                          valinit=10.0,
+                          valinit=1.0,
                           valfmt='%1.2f')
     slider_C.on_changed(onChangeValue)
 
@@ -120,6 +130,7 @@ if __name__ == '__main__':
                           valfmt='%1.2f')
     slider_R_12.on_changed(onChangeValue)
 
+    plt.
 
     updateGraph()
 
